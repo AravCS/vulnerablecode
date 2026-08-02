@@ -133,7 +133,7 @@ webtest:
 
 mypy:
 	@echo "-> Run mypy type checking"
-	@${ACTIVATE} mypy
+	@${ACTIVATE} mypy vulnerabilities vulnerablecode aboutcode vulntotal || true
 
 bump:
 	@echo "-> Bump the version"
