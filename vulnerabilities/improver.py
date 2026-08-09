@@ -35,12 +35,12 @@ class Inference:
     relationship is to be inserted into the database
     """
 
-    vulnerability_id: str = None
+    vulnerability_id: str | None = None
     aliases: Optional[List[str]] = dataclasses.field(default_factory=list)
     confidence: int = MAX_CONFIDENCE
     summary: Optional[str] = ""
     affected_purls: Optional[List[PackageURL]] = dataclasses.field(default_factory=list)
-    fixed_purl: PackageURL = None
+    fixed_purl: PackageURL | None = None
     references: List[Reference] = dataclasses.field(default_factory=list)
     weaknesses: List[int] = dataclasses.field(default_factory=list)
 
@@ -84,7 +84,7 @@ class Inference:
             "confidence": self.confidence,
             "summary": self.summary,
             "affected_purls": [
-                purl_to_dict(affected_purl) for affected_purl in self.affected_purls
+                purl_to_dict(affected_purl) for affected_purl in self.affected_purls or []
             ],
             "fixed_purl": purl_to_dict(self.fixed_purl) if self.fixed_purl else None,
             "references": [ref.to_dict() for ref in self.references],
@@ -117,7 +117,7 @@ class Improver:
     """
 
     @classproperty
-    def qualified_name(cls):
+    def qualified_name(cls: type["Improver"]) -> str:
         """
         Fully qualified name prefixed with the module name of the improver used in logging.
         """

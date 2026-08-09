@@ -252,8 +252,8 @@ class PackageCommitPatchData:
     def from_dict(cls, data: dict):
         """Create a PackageCommitPatchData instance from a dictionary."""
         return cls(
-            vcs_url=data.get("vcs_url"),
-            commit_hash=data.get("commit_hash"),
+            vcs_url=data.get("vcs_url") or "",
+            commit_hash=data.get("commit_hash") or "",
             patch_text=data.get("patch_text"),
         )
 
@@ -430,7 +430,8 @@ class AffectedPackage:
                 fixed_version = affected_version_range.version_class(fixed_version)
             elif package.type in RANGE_CLASS_BY_SCHEMES:
                 vrc = RANGE_CLASS_BY_SCHEMES[package.type]
-                fixed_version = vrc.version_class(fixed_version)
+                if vrc.version_class is not None:
+                    fixed_version = vrc.version_class(fixed_version)
 
         if not fixed_version and not affected_version_range:
             logger.error(
@@ -760,7 +761,7 @@ class Importer:
             ) from e
 
     @classproperty
-    def qualified_name(cls):
+    def qualified_name(cls: type["Importer"]) -> str:
         """
         Fully qualified name prefixed with the module name of the improver used in logging.
         """
@@ -794,6 +795,7 @@ class OvalImporter(Importer):
 
     data_url: str = ""
     importer_name = "Oval Importer"
+    translations: dict
 
     @staticmethod
     def create_purl(pkg_name: str, pkg_data: Mapping) -> PackageURL:
@@ -832,7 +834,7 @@ class OvalImporter(Importer):
         # TODO: enforce that we receive the proper data here
         raise NotImplementedError
 
-    def advisory_data(self) -> List[AdvisoryData]:
+    def advisory_data(self) -> Iterable[AdvisoryData]:
         for metadata, oval_file in self._fetch():
             try:
                 oval_data = self.get_data_from_xml_doc(oval_file, metadata)
