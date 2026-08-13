@@ -9,7 +9,7 @@
 
 import logging
 import os
-from typing import Iterable
+from typing import Iterable, Any
 
 import requests
 from packageurl import PackageURL
@@ -104,8 +104,8 @@ def parse_advisory(component, purl) -> Iterable[VendorData]:
     vulnerabilities = response.get("vulnerabilities") or []
     for vuln in vulnerabilities:
         aliases = [vuln["id"]]
-        affected_versions = []
-        fixed_versions = []
+        affected_versions: list[str] = []
+        fixed_versions: list[str] = []
         version_ranges = vuln.get("versionRanges") or []
         affected_versions.extend(version_ranges)
         yield VendorData(

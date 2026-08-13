@@ -9,7 +9,7 @@
 
 import logging
 import os
-from typing import Iterable
+from typing import Iterable, Any
 from urllib.parse import urljoin
 
 import requests
@@ -56,7 +56,9 @@ class VulnerableCodeDataSource(DataSource):
         Returns:
             A JSON object containing the response data, or None if an error occurs while fetching data from the URL.
         """
-        response = fetch_vulnerablecode_query(url=url, payload=None)
+        response = fetch_vulnerablecode_query(url=url, payload=dict())
+        if response.status_code != 200:
+            logger.error(f"Error while fetching {url}")
         if response.status_code != 200:
             logger.error(f"Error while fetching {url}")
             return
@@ -103,15 +105,15 @@ class VulnerableCodeDataSource(DataSource):
 
 def parse_advisory(fetched_advisory, purl) -> VendorData:
     aliases = [aliase["alias"] for aliase in fetched_advisory["aliases"]]
-    affected_versions = []
-    fixed_versions = []
+    affected_versions: list[str] = []
+    fixed_versions: list[str] = []
     for instance in fetched_advisory["affected_packages"]:
         affected_purl = PackageURL.from_string(instance["purl"])
-        if affected_purl.type == purl.type:
+        if affected_purl.type == purl.type and affected_purl.version is not None:
             affected_versions.append(affected_purl.version)
     for instance in fetched_advisory["fixed_packages"]:
         fixed_purl = PackageURL.from_string(instance["purl"])
-        if fixed_purl.type == purl.type:
+        if fixed_purl.type == purl.type and fixed_purl.version is not None:
             fixed_versions.append(fixed_purl.version)
     return VendorData(
         purl=PackageURL(purl.type, purl.namespace, purl.name),

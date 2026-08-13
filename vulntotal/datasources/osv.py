@@ -85,8 +85,8 @@ def parse_advisory(response, purl) -> Iterable[VendorData]:
     """
 
     for vuln in response.get("vulns") or []:
-        aliases = []
-        affected_versions = []
+        aliases: list[str] = []
+        affected_versions: list[str] = []
         fixed = []
 
         aliases.extend(vuln.get("aliases") or [])

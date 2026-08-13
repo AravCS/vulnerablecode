@@ -107,7 +107,7 @@ def get_package_slug(purl):
 
 
 def get_casesensitive_slug(path, package_slug):
-    payload = [
+    payload: list[dict] = [
         {
             "operationName": "getPaginatedTree",
             "variables": {
