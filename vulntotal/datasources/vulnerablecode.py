@@ -9,7 +9,8 @@
 
 import logging
 import os
-from typing import Iterable, Any
+from typing import Any
+from typing import Iterable
 from urllib.parse import urljoin
 
 import requests

@@ -9,7 +9,8 @@
 
 import logging
 import os
-from typing import Iterable, Any
+from typing import Any
+from typing import Iterable
 
 import requests
 from packageurl import PackageURL

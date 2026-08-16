@@ -8,7 +8,8 @@
 #
 
 import logging
-from typing import Iterable, Any
+from typing import Any
+from typing import Iterable
 
 from dotenv import load_dotenv
 from fetchcode.utils import github_response
@@ -304,7 +305,7 @@ def group_advisory_by_package(advisories_dict, cve):
             vulnerableVersionRange (list of str): List of vulnerable version ranges.
     """
     advisories = advisories_dict["data"]["securityAdvisories"]["nodes"]
-    output: list[dict[str, Any]]
+    output: list[dict[str, Any]] = []
 
     for advisory in advisories:
         for vulnerability in advisory["vulnerabilities"]["nodes"]:
