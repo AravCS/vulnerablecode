@@ -43,7 +43,7 @@ class DepsDataSource(DataSource):
         """
         payload = generate_meta_payload(purl)
         if not payload:
-            return 
+            return
         response = self.fetch_json_response(payload)
         if response:
             advisories = parse_advisories_from_meta(response)
@@ -54,10 +54,6 @@ class DepsDataSource(DataSource):
                     self._raw_dump.append(fetched_advisory)
                     if fetched_advisory:
                         return parse_advisory(fetched_advisory, purl)
-
-
-
-
 
     @classmethod
     def supported_ecosystem(cls):
