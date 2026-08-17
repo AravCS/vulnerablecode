@@ -63,12 +63,13 @@ class OSSDataSource(DataSource):
     def datasource_advisory(self, purl) -> Iterable[VendorData]:
         if purl.type not in self.supported_ecosystem():
             logger.error("Unsupported PURL")
-            return
+            return []
 
         response = self.fetch_json_response([str(purl)])
         if response:
             self._raw_dump.append(response)
             return parse_advisory(response, purl)
+        return []
 
     @classmethod
     def supported_ecosystem(cls):
