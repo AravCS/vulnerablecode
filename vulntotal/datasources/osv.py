@@ -48,7 +48,7 @@ class OSVDataSource(DataSource):
     def datasource_advisory(self, purl) -> Iterable[VendorData]:
         payload = generate_payload(purl)
         if not payload:
-            return
+            return []
         advisory = self.fetch_advisory(payload)
         self._raw_dump.append(advisory)
         return parse_advisory(advisory, purl)

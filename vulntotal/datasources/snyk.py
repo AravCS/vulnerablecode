@@ -15,6 +15,7 @@ from urllib.parse import unquote_plus
 
 import requests
 from bs4 import BeautifulSoup
+from bs4 import Tag
 from packageurl import PackageURL
 
 from vulntotal.validator import DataSource
@@ -246,8 +247,9 @@ def extract_html_json_advisories(package_advisories):
     else:
         soup = BeautifulSoup(package_advisories, "html.parser")
         vulns_table = soup.find("tbody", class_="vue--table__tbody")
+
         if vulns_table:
-            vulns_rows = vulns_table.find_all("tr", class_="vue--table__row")
+            vulns_rows = vulns_table.find_all("tr", class_="vue--table__row")  # type: ignore[attr-defined]
             for row in vulns_rows:
                 anchor = row.find(class_="vue--anchor")
                 ranges = row.find_all(
@@ -255,6 +257,7 @@ def extract_html_json_advisories(package_advisories):
                 )
                 affected_versions = [vers.text.strip() for vers in ranges]
                 vulnerability[anchor["href"].rsplit("/", 1)[-1]] = affected_versions
+
     return vulnerability
 
 
@@ -277,14 +280,14 @@ def parse_html_advisory(advisory_html, snyk_id, affected, purl) -> VendorData:
     advisory_soup = BeautifulSoup(advisory_html, "html.parser")
     cve_span = advisory_soup.find("span", class_="cve")
     if cve_span:
-        if cve_anchor := cve_span.find("a", class_="vue--anchor"):
+        if cve_anchor := cve_span.find("a", class_="vue--anchor"):  # type: ignore[attr-defined]
             aliases.append(cve_anchor.get("id"))
 
     how_to_fix = advisory_soup.find(
         "div", class_="vue--block vuln-page__instruction-block vue--block--instruction"
     )
 
-    if how_to_fix and (fixed := how_to_fix.find("p").text):
+    if how_to_fix and (fixed := how_to_fix.find("p").text):  # type: ignore[attr-defined]
         fixed_versions = fixed_version_pattern.findall(fixed)
 
     aliases.append(snyk_id)
@@ -310,7 +313,7 @@ def parse_cve_advisory_html(cve_advisory_html):
     vulns_table = cve_advisory_soup.find("tbody", class_="vue--table__tbody")
     if not vulns_table:
         return None
-    vulns_rows = vulns_table.find_all("tr", class_="vue--table__row")
+    vulns_rows = vulns_table.find_all("tr", class_="vue--table__row")  # type: ignore[attr-defined]
     vulns_list = {}
 
     for row in vulns_rows:

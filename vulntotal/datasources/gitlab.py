@@ -52,6 +52,7 @@ class GitlabDataSource(DataSource):
 
             interesting_advisories = parse_interesting_advisories(yml_files, purl)
             return interesting_advisories
+        return []
 
     @classmethod
     def supported_ecosystem(cls):
