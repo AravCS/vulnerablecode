@@ -57,9 +57,7 @@ class VulnerableCodeDataSource(DataSource):
         Returns:
             A JSON object containing the response data, or None if an error occurs while fetching data from the URL.
         """
-        response = fetch_vulnerablecode_query(url=url, payload=dict())
-        if response.status_code != 200:
-            logger.error(f"Error while fetching {url}")
+        response = fetch_vulnerablecode_query(url=url, payload=None)
         if response.status_code != 200:
             logger.error(f"Error while fetching {url}")
             return
@@ -128,7 +126,7 @@ class VCIOTokenError(Exception):
     pass
 
 
-def fetch_vulnerablecode_query(url: str, payload: dict):
+def fetch_vulnerablecode_query(url: str, payload: dict | None):
     """
     Requires VCIO API key in .env file
     For example:

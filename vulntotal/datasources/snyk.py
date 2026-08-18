@@ -14,7 +14,8 @@ from urllib.parse import quote
 from urllib.parse import unquote_plus
 
 import requests
-from bs4 import BeautifulSoup, Tag
+from bs4 import BeautifulSoup
+from bs4 import Tag
 from packageurl import PackageURL
 
 from vulntotal.validator import DataSource
