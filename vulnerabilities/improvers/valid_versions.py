@@ -251,7 +251,7 @@ class NginxBasicImprover(Improver):
         for affected_version_range in affected_version_ranges:
             for version in all_versions:
                 # FIXME: we should reference an NginxVersion tbd in univers
-                version = str(NginxVersion(version))
+                version = NginxVersion(version)  # type: ignore[assignment] #str(NginxVersion(v)) reverts to str, causing isinstance failure in NginxVersionRange.__contains__
                 if is_vulnerable_nginx_version(
                     version=version,
                     affected_version_range=affected_version_range,
