@@ -50,7 +50,7 @@ class DefaultImprover(Improver):
 
     def get_inferences(self, advisory_data: AdvisoryData) -> Iterable[Inference]:
         if not advisory_data:
-            return []
+            return
 
         if advisory_data.affected_packages:
             for affected_package in advisory_data.affected_packages:
@@ -84,7 +84,7 @@ class DefaultImprover(Improver):
             )
 
 
-def get_exact_purls(affected_package: AffectedPackage) -> Tuple[List[PackageURL], PackageURL]:
+def get_exact_purls(affected_package: AffectedPackage) -> Tuple[List[PackageURL], List[PackageURL]]:
     """
     Return a list of affected purls and the fixed package found in the ``affected_package``
     AffectedPackage disregarding any ranges.
