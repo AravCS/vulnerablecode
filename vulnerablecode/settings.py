@@ -23,7 +23,7 @@ ROOT_DIR = PROJECT_DIR.parent
 
 ENV_FILE = "/etc/vulnerablecode/.env"
 if not Path(ENV_FILE).exists():
-    ENV_FILE = ROOT_DIR / ".env"
+    ENV_FILE = str(ROOT_DIR / ".env")
 
 env = environ.Env()
 environ.Env.read_env(str(ENV_FILE))
@@ -74,7 +74,7 @@ VULNERABLECODE_LOG_LEVEL = env.str("VULNERABLECODE_LOG_LEVEL", "INFO")
 
 # Application definition
 
-INSTALLED_APPS = (
+INSTALLED_APPS: tuple[str, ...] = (
     # Local apps
     # Must come before Third-party apps for proper templates override
     "vulnerabilities",
@@ -103,7 +103,7 @@ INSTALLED_APPS = (
 )
 
 
-MIDDLEWARE = (
+MIDDLEWARE: tuple[str, ...] = (
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",

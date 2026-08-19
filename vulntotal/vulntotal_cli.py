@@ -259,7 +259,7 @@ def get_raw_response(purl, datasources):
 
 
 def run_datasources(purl, datasources, no_threading=False):
-    vulnerabilities = {}
+    vulnerabilities: dict[str, list[VendorData]] = {}
     if not no_threading:
         with concurrent.futures.ThreadPoolExecutor(max_workers=len(datasources)) as executor:
             future_to_advisory = {
@@ -368,9 +368,9 @@ def prettyprint(purl, datasources, pagination, no_threading):
 
 
 def group_by_cve(vulnerabilities, purl, no_compare):
-    grouped_by_cve = {}
-    nocve = {}
-    noadvisory = {}
+    grouped_by_cve: dict[str, dict[str, list[dict[str, VendorData | None]]]] = {}
+    nocve: dict[str, list[dict[str, VendorData | None]]] = {}
+    noadvisory: dict[str, list[dict[str, VendorData | None]]] = {}
     for datasource, advisories in vulnerabilities.items():
         if not advisories:
             if datasource not in noadvisory:
@@ -437,7 +437,7 @@ def compare(grouped_by_cve):
         if cve in ("NOCVE", "NOADVISORY"):
             continue
         sources = list(advisories.keys())
-        board = {source: {} for source in sources}
+        board: dict[str, dict[str, int | float]] = {source: {} for source in sources}
 
         # For each unique CVE create the scoring board to score
         # advisory from different datasources.
@@ -571,7 +571,8 @@ def get_range_from_discrete_version_string(schema, versions):
     range_cls = RANGE_CLASS_BY_SCHEMES.get(schema)
     if isinstance(versions, str):
         versions = [versions]
-    return range_cls.from_versions(versions)
+    if isinstance(range_cls, versions):
+        return range_cls.from_versions(versions)
 
 
 VERSION_RANGE_BY_DATASOURCE = {

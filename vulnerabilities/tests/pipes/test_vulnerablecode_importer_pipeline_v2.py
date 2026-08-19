@@ -34,7 +34,7 @@ from vulnerabilities.pipes.advisory import classify_patch_source
 class DummyImporter(VulnerableCodeBaseImporterPipelineV2):
     pipeline_id = "dummy_importer_v2"
     datasource_id = "dummy_v2"
-    log_messages = []
+    log_messages: list[tuple[int, str]] = []
 
     def log(self, message, level=logging.INFO):
         self.log_messages.append((level, message))
