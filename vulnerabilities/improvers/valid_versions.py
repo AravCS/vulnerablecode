@@ -62,8 +62,8 @@ class ValidVersionImprover(Improver):
 
     @property
     def interesting_advisories(self) -> QuerySet:
-        if issubclass(self.importer, VulnerableCodeBaseImporterPipeline):
-            return Advisory.objects.filter(Q(created_by=self.importer.pipeline_id)).paginated()
+        if issubclass(self.importer, VulnerableCodeBaseImporterPipeline):  # type: ignore[arg-type]
+            return Advisory.objects.filter(Q(created_by=self.importer.pipeline_id)).paginated()  # type: ignore[attr-defined]  # self.importer is used inconsistently as both a class and an instance across ValidVersionImprover subclasses; needs a design decision before this can be typed correctly
         return Advisory.objects.filter(Q(created_by=self.importer.qualified_name)).paginated()
 
     def get_package_versions(
@@ -245,13 +245,13 @@ class NginxBasicImprover(Improver):
                 f"NginxBasicImprover: Cannot merge with different purls: "
                 f"{advisory_data.affected_packages!r}"
             )
-            return iter([])
+            return
 
         affected_purls = []
         for affected_version_range in affected_version_ranges:
             for version in all_versions:
                 # FIXME: we should reference an NginxVersion tbd in univers
-                version = NginxVersion(version)
+                version = NginxVersion(version)  # type: ignore[assignment] #str(NginxVersion(v)) reverts to str, causing isinstance failure in NginxVersionRange.__contains__
                 if is_vulnerable_nginx_version(
                     version=version,
                     affected_version_range=affected_version_range,
@@ -284,8 +284,8 @@ class NginxBasicImprover(Improver):
 
 
 class ApacheHTTPDImprover(ValidVersionImprover):
-    importer = ApacheHTTPDImporter
-    ignorable_versions = {
+    importer = ApacheHTTPDImporter()
+    ignorable_versions = [
         "AGB_BEFORE_AAA_CHANGES",
         "APACHE_1_2b1",
         "APACHE_1_2b10",
@@ -346,132 +346,130 @@ class ApacheHTTPDImprover(ValidVersionImprover):
         "mpm-merge-2",
         "post_ajp_proxy",
         "pre_ajp_proxy",
-    }
+    ]
 
 
 class ApacheTomcatImprover(ValidVersionImprover):
-    importer = ApacheTomcatImporter
+    importer = ApacheTomcatImporter()
     ignorable_versions = []
 
 
 class ApacheKafkaImprover(ValidVersionImprover):
-    importer = ApacheKafkaImporter
+    importer = ApacheKafkaImporter()
     ignorable_versions = []
 
 
 class DebianBasicImprover(ValidVersionImprover):
-    importer = DebianImporter
+    importer = DebianImporter()
     ignorable_versions = []
 
 
 class GitLabBasicImprover(ValidVersionImprover):
-    importer = GitLabImporterPipeline
+    importer = GitLabImporterPipeline()
     ignorable_versions = []
 
 
 class GitHubBasicImprover(ValidVersionImprover):
-    importer = GitHubAPIImporterPipeline
-    ignorable_versions = frozenset(
-        [
-            "0.1-bulbasaur",
-            "0.1-charmander",
-            "0.3m1",
-            "0.3m2",
-            "0.3m3",
-            "0.3m4",
-            "0.3m5",
-            "0.4m1",
-            "0.4m2",
-            "0.4m3",
-            "0.4m4",
-            "0.4m5",
-            "0.5m1",
-            "0.5m2",
-            "0.5m3",
-            "0.5m4",
-            "0.5m5",
-            "0.6m1",
-            "0.6m2",
-            "0.6m3",
-            "0.6m4",
-            "0.6m5",
-            "0.6m6",
-            "0.7.10p1",
-            "0.7.11p1",
-            "0.7.11p2",
-            "0.7.11p3",
-            "0.8.1p1",
-            "0.8.3p1",
-            "0.8.4p1",
-            "0.8.4p2",
-            "0.8.6p1",
-            "0.8.7p1",
-            "0.9-doduo",
-            "0.9-eevee",
-            "0.9-fearow",
-            "0.9-gyarados",
-            "0.9-horsea",
-            "0.9-ivysaur",
-            "2013-01-21T20:33:09+0100",
-            "2013-01-23T17:11:52+0100",
-            "2013-02-01T20:50:46+0100",
-            "2013-02-02T19:59:03+0100",
-            "2013-02-02T20:23:17+0100",
-            "2013-02-08T17:40:57+0000",
-            "2013-03-27T16:32:26+0100",
-            "2013-05-09T12:47:53+0200",
-            "2013-05-10T17:55:56+0200",
-            "2013-05-14T20:16:05+0200",
-            "2013-06-01T10:32:51+0200",
-            "2013-07-19T09:11:08+0000",
-            "2013-08-12T21:48:56+0200",
-            "2013-09-11T19-27-10",
-            "2013-12-23T17-51-15",
-            "2014-01-12T15-52-10",
-            "2.0.1rc2-git",
-            "3.0.0b3-",
-            "3.0b6dev-r41684",
-            "-class.-jw.util.version.Version-",
-            "vulnerabilities",
-        ]
-    )
+    importer = GitHubAPIImporterPipeline()
+    ignorable_versions: list[str] = [
+        "0.1-bulbasaur",
+        "0.1-charmander",
+        "0.3m1",
+        "0.3m2",
+        "0.3m3",
+        "0.3m4",
+        "0.3m5",
+        "0.4m1",
+        "0.4m2",
+        "0.4m3",
+        "0.4m4",
+        "0.4m5",
+        "0.5m1",
+        "0.5m2",
+        "0.5m3",
+        "0.5m4",
+        "0.5m5",
+        "0.6m1",
+        "0.6m2",
+        "0.6m3",
+        "0.6m4",
+        "0.6m5",
+        "0.6m6",
+        "0.7.10p1",
+        "0.7.11p1",
+        "0.7.11p2",
+        "0.7.11p3",
+        "0.8.1p1",
+        "0.8.3p1",
+        "0.8.4p1",
+        "0.8.4p2",
+        "0.8.6p1",
+        "0.8.7p1",
+        "0.9-doduo",
+        "0.9-eevee",
+        "0.9-fearow",
+        "0.9-gyarados",
+        "0.9-horsea",
+        "0.9-ivysaur",
+        "2013-01-21T20:33:09+0100",
+        "2013-01-23T17:11:52+0100",
+        "2013-02-01T20:50:46+0100",
+        "2013-02-02T19:59:03+0100",
+        "2013-02-02T20:23:17+0100",
+        "2013-02-08T17:40:57+0000",
+        "2013-03-27T16:32:26+0100",
+        "2013-05-09T12:47:53+0200",
+        "2013-05-10T17:55:56+0200",
+        "2013-05-14T20:16:05+0200",
+        "2013-06-01T10:32:51+0200",
+        "2013-07-19T09:11:08+0000",
+        "2013-08-12T21:48:56+0200",
+        "2013-09-11T19-27-10",
+        "2013-12-23T17-51-15",
+        "2014-01-12T15-52-10",
+        "2.0.1rc2-git",
+        "3.0.0b3-",
+        "3.0b6dev-r41684",
+        "-class.-jw.util.version.Version-",
+        "vulnerabilities",
+    ]
 
 
 class NpmImprover(ValidVersionImprover):
-    importer = NpmImporterPipeline
+    importer = NpmImporterPipeline()
     ignorable_versions = []
 
 
 class ElixirImprover(ValidVersionImprover):
-    importer = ElixirSecurityImporter
+    importer = ElixirSecurityImporter()
     ignorable_versions = []
 
 
 class IstioImprover(ValidVersionImprover):
-    importer = IstioImporter
+    importer = IstioImporter()
     ignorable_versions = []
 
 
 class DebianOvalImprover(ValidVersionImprover):
-    importer = DebianOvalImporter
+    importer = DebianOvalImporter()
     ignorable_versions = []
 
 
 class OSSFuzzImprover(ValidVersionImprover):
-    importer = OSSFuzzImporter
+    importer = OSSFuzzImporter()
     ignorable_versions = []
 
 
 class RubyImprover(ValidVersionImprover):
-    importer = RubyImporter
+    importer = RubyImporter()
     ignorable_versions = []
 
 
 class GithubOSVImprover(ValidVersionImprover):
-    importer = GithubOSVImporter
+    importer = GithubOSVImporter()
     ignorable_versions = []
 
 
 class CurlImprover(ValidVersionImprover):
-    importer = CurlImporter
+    importer = CurlImporter()
     ignorable_versions = []

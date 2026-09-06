@@ -52,6 +52,7 @@ class GitlabDataSource(DataSource):
 
             interesting_advisories = parse_interesting_advisories(yml_files, purl)
             return interesting_advisories
+        return []
 
     @classmethod
     def supported_ecosystem(cls):
@@ -107,7 +108,7 @@ def get_package_slug(purl):
 
 
 def get_casesensitive_slug(path, package_slug):
-    payload = [
+    payload: list[dict] = [
         {
             "operationName": "getPaginatedTree",
             "variables": {

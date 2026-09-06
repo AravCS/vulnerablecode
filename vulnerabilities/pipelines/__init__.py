@@ -140,7 +140,7 @@ class BasePipelineRun:
 
 
 class VulnerableCodePipeline(PipelineDefinition, BasePipelineRun):
-    pipeline_id = None  # Unique Pipeline ID
+    pipeline_id: str | None = None  # Unique Pipeline ID
 
     # When set to true pipeline is run only once.
     # To rerun onetime pipeline reset is_active field to True via migration.
@@ -170,11 +170,12 @@ class VulnerableCodeBaseImporterPipeline(VulnerableCodePipeline):
         method. Also override the ``steps`` and ``advisory_confidence`` as needed.
     """
 
-    pipeline_id = None  # Unique Pipeline ID, this should be the name of pipeline module.
-    license_url = None
-    spdx_license_expression = None
-    repo_url = None
-    importer_name = None
+    # Unique Pipeline ID, this should be the name of pipeline module.
+    pipeline_id: str | None = None
+    license_url: str | None = None
+    spdx_license_expression: str | None = None
+    repo_url: str | None = None
+    importer_name: str | None = None
     advisory_confidence = MAX_CONFIDENCE
 
     # When set to true pipeline is run only once.
@@ -271,12 +272,13 @@ class VulnerableCodeBaseImporterPipelineV2(VulnerableCodePipeline):
         method. Also override the ``steps`` and ``advisory_confidence`` as needed.
     """
 
-    pipeline_id = None  # Unique Pipeline ID, this should be the name of pipeline module.
-    license_url = None
-    datasource_id = None
-    spdx_license_expression = None
-    repo_url = None
-    ignorable_versions = []
+    # Unique Pipeline ID, this should be the name of pipeline module.
+    pipeline_id: str | None = None
+    license_url: str | None = None
+    datasource_id: str | None = None
+    spdx_license_expression: str | None = None
+    repo_url: str | None = None
+    ignorable_versions: Iterable[str] = []
     precedence = 0
 
     # Set this to True if computing fixed/affected package ToDo is not fruitful for this source.

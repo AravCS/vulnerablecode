@@ -48,7 +48,7 @@ class OSVDataSource(DataSource):
     def datasource_advisory(self, purl) -> Iterable[VendorData]:
         payload = generate_payload(purl)
         if not payload:
-            return
+            return []
         advisory = self.fetch_advisory(payload)
         self._raw_dump.append(advisory)
         return parse_advisory(advisory, purl)
@@ -85,8 +85,8 @@ def parse_advisory(response, purl) -> Iterable[VendorData]:
     """
 
     for vuln in response.get("vulns") or []:
-        aliases = []
-        affected_versions = []
+        aliases: list[str] = []
+        affected_versions: list[str] = []
         fixed = []
 
         aliases.extend(vuln.get("aliases") or [])

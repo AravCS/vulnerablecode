@@ -161,7 +161,8 @@ class TestOSVImporter(TestCase):
         imported_data = parse_advisory_data_v3(
             mock_response, "maven", advisory_url="https://test.com", advisory_text=""
         )
-        result = imported_data.to_dict()
+        if imported_data is not None:
+            result = imported_data.to_dict()
         util_tests.check_results_against_json(result, expected_file)
 
     def test_to_advisories_github2(self):
@@ -171,7 +172,8 @@ class TestOSVImporter(TestCase):
         imported_data = parse_advisory_data_v3(
             mock_response, "composer", advisory_url="https://test.com", advisory_text=""
         )
-        result = imported_data.to_dict()
+        if imported_data is not None:
+            result = imported_data.to_dict()
         util_tests.check_results_against_json(result, expected_file)
 
     def test_to_advisories_github3(self):
@@ -181,7 +183,8 @@ class TestOSVImporter(TestCase):
         imported_data = parse_advisory_data_v3(
             mock_response, "maven", advisory_url="https://test.com", advisory_text=""
         )
-        result = imported_data.to_dict()
+        if imported_data is not None:
+            result = imported_data.to_dict()
         util_tests.check_results_against_json(result, expected_file)
 
     def test_to_advisories_github4(self):
@@ -191,7 +194,8 @@ class TestOSVImporter(TestCase):
         imported_data = parse_advisory_data_v3(
             mock_response, "cargo", advisory_url="https://test.com", advisory_text=""
         )
-        result = imported_data.to_dict()
+        if imported_data is not None:
+            result = imported_data.to_dict()
         util_tests.check_results_against_json(result, expected_file)
 
     def test_to_advisories_github5(self):
@@ -211,7 +215,8 @@ class TestOSVImporter(TestCase):
         imported_data = parse_advisory_data_v3(
             mock_response, "generic", advisory_url="https://test.com", advisory_text=""
         )
-        result = imported_data.to_dict()
+        if imported_data is not None:
+            result = imported_data.to_dict()
         util_tests.check_results_against_json(result, expected_file)
 
     def test_to_advisories_oss_fuzz2(self):
@@ -221,7 +226,8 @@ class TestOSVImporter(TestCase):
         imported_data = parse_advisory_data_v3(
             mock_response, "generic", advisory_url="https://test.com", advisory_text=""
         )
-        result = imported_data.to_dict()
+        if imported_data is not None:
+            result = imported_data.to_dict()
         util_tests.check_results_against_json(result, expected_file)
 
     def test_to_advisories_oss_fuzz3(self):
@@ -231,7 +237,8 @@ class TestOSVImporter(TestCase):
         imported_data = parse_advisory_data_v3(
             mock_response, "generic", advisory_url="https://test.com", advisory_text=""
         )
-        result = imported_data.to_dict()
+        if imported_data is not None:
+            result = imported_data.to_dict()
         util_tests.check_results_against_json(result, expected_file)
 
     def test_to_advisories_pypa1(self):
@@ -241,7 +248,8 @@ class TestOSVImporter(TestCase):
         imported_data = parse_advisory_data_v3(
             mock_response, "pypi", advisory_url="https://test.com", advisory_text=""
         )
-        result = imported_data.to_dict()
+        if imported_data is not None:
+            result = imported_data.to_dict()
         util_tests.check_results_against_json(result, expected_file)
 
     def test_to_advisories_pypa2(self):
@@ -251,7 +259,8 @@ class TestOSVImporter(TestCase):
         imported_data = parse_advisory_data_v3(
             mock_response, "pypi", advisory_url="https://test.com", advisory_text=""
         )
-        result = imported_data.to_dict()
+        if imported_data is not None:
+            result = imported_data.to_dict()
         util_tests.check_results_against_json(result, expected_file)
 
     def test_to_advisories_pypa3(self):
@@ -261,7 +270,8 @@ class TestOSVImporter(TestCase):
         imported_data = parse_advisory_data_v3(
             mock_response, "pypi", advisory_url="https://test.com", advisory_text=""
         )
-        result = imported_data.to_dict()
+        if imported_data is not None:
+            result = imported_data.to_dict()
         util_tests.check_results_against_json(result, expected_file)
 
     def test_to_advisories_pypa4(self):
@@ -271,7 +281,8 @@ class TestOSVImporter(TestCase):
         imported_data = parse_advisory_data_v3(
             mock_response, "pypi", advisory_url="https://test.com", advisory_text=""
         )
-        result = imported_data.to_dict()
+        if imported_data is not None:
+            result = imported_data.to_dict()
         util_tests.check_results_against_json(result, expected_file)
 
     def test_to_advisories_pypa5(self):
@@ -281,7 +292,8 @@ class TestOSVImporter(TestCase):
         imported_data = parse_advisory_data_v3(
             mock_response, "pypi", advisory_url="https://test.com", advisory_text=""
         )
-        result = imported_data.to_dict()
+        if imported_data is not None:
+            result = imported_data.to_dict()
         util_tests.check_results_against_json(result, expected_file)
 
     def test_to_advisories_pypa6(self):
@@ -291,7 +303,8 @@ class TestOSVImporter(TestCase):
         imported_data = parse_advisory_data_v3(
             mock_response, "pypi", advisory_url="https://test.com", advisory_text=""
         )
-        result = imported_data.to_dict()
+        if imported_data is not None:
+            result = imported_data.to_dict()
         util_tests.check_results_against_json(result, expected_file)
 
     def test_to_advisories_pypa7(self):
@@ -301,7 +314,8 @@ class TestOSVImporter(TestCase):
         imported_data = parse_advisory_data_v3(
             mock_response, "pypi", advisory_url="https://test.com", advisory_text=""
         )
-        result = imported_data.to_dict()
+        if imported_data is not None:
+            result = imported_data.to_dict()
         util_tests.check_results_against_json(result, expected_file)
 
     def test_to_advisories_pypa8_cvss_v3_0_parsing(self):
@@ -311,5 +325,6 @@ class TestOSVImporter(TestCase):
         imported_data = parse_advisory_data_v3(
             mock_response, "pypi", advisory_url="https://test.com", advisory_text=""
         )
-        result = imported_data.to_dict()
+        if imported_data is not None:
+            result = imported_data.to_dict()
         util_tests.check_results_against_json(result, expected_file, regen=True)

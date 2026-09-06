@@ -8,6 +8,7 @@
 #
 
 import logging
+from typing import Any
 from typing import Iterable
 
 from dotenv import load_dotenv
@@ -304,7 +305,7 @@ def group_advisory_by_package(advisories_dict, cve):
             vulnerableVersionRange (list of str): List of vulnerable version ranges.
     """
     advisories = advisories_dict["data"]["securityAdvisories"]["nodes"]
-    output = []
+    output: list[dict[str, Any]] = []
 
     for advisory in advisories:
         for vulnerability in advisory["vulnerabilities"]["nodes"]:

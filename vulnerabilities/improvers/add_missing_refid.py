@@ -44,3 +44,4 @@ class CveIdImprover(Improver):
                 cve = cve_match.group()
                 ref.reference_id = cve
                 ref.save()
+        return []

@@ -21,7 +21,7 @@ from vulnerabilities.utils import get_item
 
 def parse_affected_fixed(affected):
     impact_lower = affected.get("version")
-    affected_constraint = []
+    affected_constraint: list[VersionConstraint] = []
     fixed_version = None
 
     if not impact_lower:

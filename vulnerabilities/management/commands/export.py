@@ -195,7 +195,7 @@ def packages_by_type_ns_name():
         yield PackageURL(*tp_ns_name), packages
 
 
-def write_file(base_path: Path, file_path: Path, data: dict):
+def write_file(base_path: Path, file_path: Path, data: dict | list):
     """
     Write the ``data`` as YAML to the ``file_path`` in the ``base_path`` root directory.
     Create directories in the path as needed.

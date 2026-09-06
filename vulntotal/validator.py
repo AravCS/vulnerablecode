@@ -44,7 +44,7 @@ class DataSource:
         """
         Yield VendorData object for crossponding PURL.
         """
-        return NotImplementedError
+        raise NotImplementedError
 
     def datasource_advisory_from_cve(self, cve: str) -> Iterable[VendorData]:
         """
@@ -53,7 +53,7 @@ class DataSource:
         if not cve.upper().startswith("CVE-"):
             raise InvalidCVEError
 
-        return NotImplementedError
+        raise NotImplementedError
 
     @classmethod
     def supported_ecosystem(cls):

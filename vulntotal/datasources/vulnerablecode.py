@@ -9,6 +9,7 @@
 
 import logging
 import os
+from typing import Any
 from typing import Iterable
 from urllib.parse import urljoin
 
@@ -103,15 +104,15 @@ class VulnerableCodeDataSource(DataSource):
 
 def parse_advisory(fetched_advisory, purl) -> VendorData:
     aliases = [aliase["alias"] for aliase in fetched_advisory["aliases"]]
-    affected_versions = []
-    fixed_versions = []
+    affected_versions: list[str] = []
+    fixed_versions: list[str] = []
     for instance in fetched_advisory["affected_packages"]:
         affected_purl = PackageURL.from_string(instance["purl"])
-        if affected_purl.type == purl.type:
+        if affected_purl.type == purl.type and affected_purl.version is not None:
             affected_versions.append(affected_purl.version)
     for instance in fetched_advisory["fixed_packages"]:
         fixed_purl = PackageURL.from_string(instance["purl"])
-        if fixed_purl.type == purl.type:
+        if fixed_purl.type == purl.type and fixed_purl.version is not None:
             fixed_versions.append(fixed_purl.version)
     return VendorData(
         purl=PackageURL(purl.type, purl.namespace, purl.name),
@@ -125,7 +126,7 @@ class VCIOTokenError(Exception):
     pass
 
 
-def fetch_vulnerablecode_query(url: str, payload: dict):
+def fetch_vulnerablecode_query(url: str, payload: dict | None):
     """
     Requires VCIO API key in .env file
     For example:
